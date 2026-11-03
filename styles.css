@@ -196,6 +196,9 @@ textarea:focus, input:focus { border-color: var(--prop-teal); outline: none; box
 }
 .opt.multi .key { border-radius: 4px; }
 .opt .txt { flex: 1 1 auto; }
+.opt.locked { cursor: default; background: var(--cream-soft); border-style: dashed; border-color: var(--light-gray); color: var(--gray); transform: none; }
+.opt.locked .key { border-color: var(--prop-teal); color: var(--prop-teal); }
+.opt.locked .sub { color: var(--prop-teal); font-weight: 500; }
 .opt .sub { display: block; font-family: var(--text); font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 2px; }
 .opt[aria-checked="true"] .sub { color: var(--body); }
 

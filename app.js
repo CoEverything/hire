@@ -283,7 +283,8 @@
   function optionsFor(s) {
     let opts = [];
     if (s.optionsFrom === 'services') {
-      opts = form.services.filter(x => !(s.excludeAnswer && answers[s.excludeAnswer] === x.value)).map(x => ({ v: x.value, hint: x.hint }));
+      if (s.excludeAnswer && Array.isArray(answers[s.key])) answers[s.key] = answers[s.key].filter(v => v !== answers[s.excludeAnswer]);
+      opts = form.services.map(x => ({ v: x.value, hint: x.hint, locked: !!(s.excludeAnswer && answers[s.excludeAnswer] === x.value) }));
     } else opts = (s.options || []).map(v => ({ v }));
     for (const x of s.extraOptions || []) opts.push({ v: x });
     if (s.other) opts.push({ v: 'Other', other: true });
@@ -348,18 +349,27 @@
       otherWrap.append(otherInp);
 
       const buttons = [];
+      let keyNo = 0;
       opts.forEach((o, i) => {
+        if (o.locked) {   // the main topic picked on the previous screen: shown, not selectable
+          const b = el('button', { type: 'button', class: 'opt locked', disabled: true, 'aria-disabled': 'true', title: 'This is your main topic' },
+            el('span', { class: 'key' }, '✓'),
+            el('span', { class: 'txt' }, o.v, el('span', { class: 'sub' }, 'Your main topic, already covered')));
+          buttons.push(b); list.append(b);
+          return;
+        }
+        const K = KEYS[keyNo++];
         const role = multi ? 'checkbox' : 'radio';
         const checked = o.other ? otherSel : isSel(o.v);
         let b;
         if (s.pattern === 'cards') {
           b = el('button', { type: 'button', class: 'card', role, 'aria-checked': String(checked), style: { '--rot': `${ROTS[i % ROTS.length]}deg`, '--i': i } },
-            el('span', { class: 'key' }, KEYS[i]), el('span', {}, o.v));
+            el('span', { class: 'key' }, K), el('span', {}, o.v));
         } else if (s.pattern === 'scrub') {
-          b = el('button', { type: 'button', class: 'chip', role, 'aria-checked': String(checked), style: { '--i': i } }, el('span', { class: 'key' }, KEYS[i]), o.v);
+          b = el('button', { type: 'button', class: 'chip', role, 'aria-checked': String(checked), style: { '--i': i } }, el('span', { class: 'key' }, K), o.v);
         } else {
           b = el('button', { type: 'button', class: 'opt' + (multi ? ' multi' : ''), role, 'aria-checked': String(checked), style: { '--i': i } },
-            el('span', { class: 'key' }, KEYS[i]),
+            el('span', { class: 'key' }, K),
             el('span', { class: 'txt' }, o.v, o.hint ? el('span', { class: 'sub' }, o.hint) : null));
         }
         b.addEventListener('click', () => choose(i));
@@ -369,6 +379,7 @@
       function paint() {
         const c = answers[key];
         opts.forEach((o, i) => {
+          if (o.locked) return;
           const on = o.other ? !!(multi ? (c || []).find(x => String(x).startsWith('Other')) : (typeof c === 'string' && c.startsWith('Other'))) : (multi ? (Array.isArray(c) && c.includes(o.v)) : c === o.v);
           buttons[i].setAttribute('aria-checked', String(on));
         });
@@ -579,6 +590,7 @@
     const clean = {};
     for (const [k, v] of Object.entries(answers)) { if (k.startsWith('_')) continue; clean[k] = Array.isArray(v) ? v : (typeof v === 'string' ? v.trim() : v); }
     clean.also_interested = Array.isArray(clean.also_interested) ? clean.also_interested : (clean.also_interested ? [clean.also_interested] : []);
+    clean.also_interested = clean.also_interested.filter(v => v !== clean.service);
     delete clean.t6_uploads;   // files only go with the final send
     return clean;
   }

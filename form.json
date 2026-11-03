@@ -60,19 +60,19 @@
     },
     {
       "id": "service", "key": "service", "section": "About you", "look": "proposal", "pattern": "pick", "cols": 1, "fig": "14", "required": true,
-      "title": "What brought you to us?",
-      "helper": "Pick the main thing. There's a \"what else\" question right after this.",
+      "title": "What's the main thing you'd like help with?",
+      "helper": "Pick one. It decides the next few questions. You can add other topics on the next screen.",
       "optionsFrom": "services",
-      "railLabel": "Main thing",
+      "railLabel": "Main topic",
       "next": "also_interested"
     },
     {
       "id": "also_interested", "key": "also_interested", "section": "About you", "look": "proposal", "pattern": "pick", "cols": 1, "fig": "14", "multi": true,
-      "title": "While you're here: we do a few other things. Any of these worth a conversation?",
-      "helper": "Ticking a box here adds a topic for when we talk. It doesn't add questions to this form.",
+      "title": "Anything else you'd like to talk about?",
+      "helper": "We've got your main topic. Tick anything else worth bringing up when we talk. These won't add questions to this form.",
       "optionsFrom": "services", "excludeAnswer": "service",
       "extraOptions": ["Not sure yet"],
-      "railLabel": "Also",
+      "railLabel": "Also to discuss",
       "next": "decision_makers"
     },
     {
