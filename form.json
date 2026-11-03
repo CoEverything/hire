@@ -1,0 +1,475 @@
+{
+  "meta": {
+    "title": "Hire CoEverything",
+    "credit": "People illustrations: cutoutmix (francescaperani), CC BY 4.0",
+    "creditUrl": "https://www.cutoutmix.com/archifunky.html",
+    "contactEmail": "hello@coeverything.co",
+    "homeUrl": "https://coeverything.co",
+    "typicalScreens": 20,
+    "maxUploads": 5,
+    "maxUploadBytes": 8388608
+  },
+  "services": [
+    { "value": "Architecture and design", "hint": "buildings, interiors, Passive House, adaptive reuse, community-driven design", "branch": "A" },
+    { "value": "Real estate development", "hint": "turning an idea into a real project: ownership, feasibility, zoning, financing", "branch": "B" },
+    { "value": "Financing strategy", "hint": "capital stack, mission-aligned investment, crowdfunding, grants", "branch": "C" },
+    { "value": "Workshops and popular education", "hint": "sessions that help groups share ideas, solve problems and act", "branch": "D" },
+    { "value": "Organizational and community consulting", "hint": "co-op formation, governance, strategic planning, facilitation, engagement", "branch": "E" },
+    { "value": "Design, web and media", "hint": "brand, websites, video, copywriting, storytelling", "branch": "F" },
+    { "value": "Software and custom tools", "hint": "member portals, intake and booking, dashboards, tools built for your project", "branch": "G" }
+  ],
+  "screens": [
+    {
+      "id": "welcome", "section": "Welcome", "look": "deck", "pattern": "statement", "fig": "20",
+      "title": "Tell us about your project",
+      "helper": "Thanks for getting in touch. Before we talk, we'd like to understand what you're working on, and this is the quickest way for both of us to get there. It takes about ten minutes. You don't need to have everything figured out: \"not sure yet\" is a perfectly good answer, and you can skip anything that doesn't fit. Nothing here commits you to anything. It just means that when we do talk, we can skip the preamble and start with the interesting part.",
+      "button": "Okay, let's go",
+      "next": "contact"
+    },
+
+    {
+      "id": "contact", "section": "About you", "look": "proposal", "pattern": "fields", "fig": "46", "required": true,
+      "title": "First, who are we talking to?",
+      "helper": "Phone is optional. We'll start by email and suggest a time to talk from there.",
+      "fields": [
+        { "key": "contact_first", "label": "First name", "required": true, "autocomplete": "given-name" },
+        { "key": "contact_last", "label": "Last name", "required": true, "autocomplete": "family-name" },
+        { "key": "contact_email", "label": "Email", "required": true, "type": "email", "autocomplete": "email" },
+        { "key": "contact_phone", "label": "Phone", "type": "tel", "autocomplete": "tel" },
+        { "key": "contact_org", "label": "Organization", "wide": true, "autocomplete": "organization" }
+      ],
+      "railLabel": "You", "railFrom": ["contact_first", "contact_last"],
+      "next": "org_type"
+    },
+    {
+      "id": "org_type", "key": "org_type", "section": "About you", "look": "collage", "pattern": "cards", "cols": 3, "fig": "17", "required": true,
+      "title": "And what kind of outfit is this?",
+      "helper": "Nonprofit, co-op, LLC, three friends and a group chat. All welcome.",
+      "options": ["Nonprofit", "Co-op or collective", "Small business or LLC", "Individual or household", "Municipality or public agency", "Informal group, not formed yet"],
+      "other": true,
+      "railLabel": "Outfit",
+      "next": "project_description"
+    },
+    {
+      "id": "project_description", "key": "project_description", "section": "About you", "look": "proposal", "pattern": "write", "fig": "46", "required": true,
+      "title": "Tell us about the project, the way you'd tell a friend.",
+      "helper": "What it is, where it is, who it's for, and how far along you are. Rough is fine. We'll ask the precise questions later.",
+      "placeholder": "It's a... in... for...",
+      "railLabel": "Project",
+      "next": "service"
+    },
+    {
+      "id": "service", "key": "service", "section": "About you", "look": "proposal", "pattern": "pick", "cols": 1, "fig": "14", "required": true,
+      "title": "What brought you to us?",
+      "helper": "Pick the main thing. There's a \"what else\" question right after this.",
+      "optionsFrom": "services",
+      "railLabel": "Main thing",
+      "next": "also_interested"
+    },
+    {
+      "id": "also_interested", "key": "also_interested", "section": "About you", "look": "proposal", "pattern": "pick", "cols": 1, "fig": "14", "multi": true,
+      "title": "While you're here: we do a few other things. Any of these worth a conversation?",
+      "helper": "Ticking a box here adds a topic for when we talk. It doesn't add questions to this form.",
+      "optionsFrom": "services", "excludeAnswer": "service",
+      "extraOptions": ["Not sure yet"],
+      "railLabel": "Also",
+      "next": "decision_makers"
+    },
+    {
+      "id": "decision_makers", "key": "decision_makers", "section": "About you", "look": "proposal", "pattern": "write", "fig": "17",
+      "title": "Who makes the call on this?",
+      "helper": "Maybe that's you, maybe it's a board, members, partners, a funder, a city agency, your mom. Names and roles if you have them, and where you fit in.",
+      "railLabel": "Deciders",
+      "next": "timing"
+    },
+    {
+      "id": "timing", "key": "timing", "section": "About you", "look": "collage", "pattern": "cards", "cols": 3, "fig": "20", "required": true,
+      "title": "When would you want to start?",
+      "options": ["Soon. Within 1 to 3 months.", "Sometime this year.", "Next year, or I'm just looking around."],
+      "railLabel": "Start",
+      "next": "deadline"
+    },
+    {
+      "id": "deadline", "key": "deadline", "section": "About you", "look": "proposal", "pattern": "short", "fig": "37",
+      "title": "Is there a date that's driving this?",
+      "helper": "A grant deadline, a lease ending, a launch, the ground thawing. Leave blank if not.",
+      "railLabel": "Date",
+      "next": { "branch": "service" }
+    },
+
+    {
+      "id": "A0", "section": "Architecture and design", "look": "deck", "pattern": "statement", "fig": "24", "kicker": "Architecture and design",
+      "title": "Buildings are where we started, and they're still our favorite thing to talk about.",
+      "helper": "A few questions about yours.",
+      "button": "Continue", "next": "a1_type"
+    },
+    {
+      "id": "a1_type", "key": "a1_type", "section": "Architecture and design", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "24", "required": true,
+      "title": "What type of project is this?",
+      "options": ["Commercial renovation", "Commercial addition or expansion", "Commercial new construction", "Residential renovation", "Residential addition or expansion", "Residential new construction"],
+      "other": true, "railLabel": "Type", "next": "a2_size"
+    },
+    {
+      "id": "a2_size", "key": "a2_size", "section": "Architecture and design", "look": "proposal", "pattern": "short", "fig": "46",
+      "title": "How big are we talking?",
+      "helper": "Square feet, number of units, or both. A guess with a question mark is fine.",
+      "railLabel": "Size", "next": "a3_site"
+    },
+    {
+      "id": "a3_site", "key": "a3_site", "section": "Architecture and design", "look": "collage", "pattern": "cards", "cols": 3, "fig": "36", "required": true,
+      "title": "Where do things stand with the site?",
+      "options": ["We own it", "We lease it", "Under agreement or purchase and sale", "Negotiating", "Looking at options", "No site yet"],
+      "railLabel": "Site",
+      "next": { "if": [ { "answerIn": ["Looking at options", "No site yet"], "go": "a4b_location" } ], "else": "a4_address" }
+    },
+    {
+      "id": "a4_address", "key": "a4_address", "section": "Architecture and design", "look": "proposal", "pattern": "fields", "fig": "36",
+      "title": "Project address",
+      "helper": "Whatever you have. A street or a parcel number both work.",
+      "fields": [
+        { "key": "street", "label": "Street", "wide": true, "autocomplete": "address-line1" },
+        { "key": "line2", "label": "Line 2", "wide": true, "autocomplete": "address-line2" },
+        { "key": "city", "label": "City", "autocomplete": "address-level2" },
+        { "key": "state", "label": "State", "autocomplete": "address-level1" },
+        { "key": "zip", "label": "Zip", "autocomplete": "postal-code" }
+      ],
+      "joinFields": true, "railLabel": "Address", "next": "a5_have"
+    },
+    {
+      "id": "a4b_location", "key": "a4b_location", "section": "Architecture and design", "look": "proposal", "pattern": "write", "fig": "36",
+      "title": "Where are you looking?",
+      "helper": "Neighborhoods, a corridor, a specific lot you keep driving past. As specific as you can.",
+      "railLabel": "Looking in", "next": "a5_have"
+    },
+    {
+      "id": "a5_have", "key": "a5_have", "section": "Architecture and design", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "46", "multi": true,
+      "title": "What do you already have in hand?",
+      "options": ["Architectural plans or drawings", "Site survey", "Geotech report", "Environmental report", "Market study", "Zoning or permit review", "Photos or site documentation", "None yet"],
+      "exclusive": ["None yet"], "railLabel": "In hand", "next": "a6_constraints"
+    },
+    {
+      "id": "a6_constraints", "key": "a6_constraints", "section": "Architecture and design", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "37", "multi": true,
+      "title": "Anything we should know will make this tricky?",
+      "helper": "We like tricky. We just want to see it coming.",
+      "options": ["Zoning relief needed", "Historic property or district", "Building stays occupied during construction", "Funder or lender requirements", "None that I know of", "Not sure"],
+      "exclusive": ["None that I know of", "Not sure"], "railLabel": "Tricky bits", "next": "a7_develop"
+    },
+    {
+      "id": "a7_develop", "key": "a7_develop", "section": "Architecture and design", "look": "collage", "pattern": "cards", "cols": 3, "fig": "36",
+      "title": "Want help developing this, not only designing it?",
+      "helper": "Development is the other half: ownership structure, feasibility, financing, and getting the thing built.",
+      "options": ["Yes", "Maybe, tell me more", "No, we've got that part"],
+      "railLabel": "Development too",
+      "next": { "if": [ { "answerIn": ["Yes", "Maybe, tell me more"], "go": "b5_support" } ], "else": "T0" }
+    },
+
+    {
+      "id": "B0", "section": "Real estate development", "look": "deck", "pattern": "statement", "fig": "36", "kicker": "Real estate development",
+      "title": "Development is the part where an idea turns into a building that actually exists.",
+      "helper": "Let's see where you're starting from.",
+      "button": "Continue", "next": "b1_type"
+    },
+    {
+      "id": "b1_type", "key": "b1_type", "section": "Real estate development", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "36", "required": true,
+      "title": "What type of project is this?",
+      "options": ["Affordable housing", "Mixed-income multifamily", "Mixed-use", "Commercial or community space", "Community land trust", "Housing cooperative", "Adaptive reuse or historic preservation", "Shared infrastructure"],
+      "other": true, "railLabel": "Type", "next": "b2_scale"
+    },
+    {
+      "id": "b2_scale", "key": "b2_scale", "section": "Real estate development", "look": "proposal", "pattern": "short", "fig": "46",
+      "title": "How big are we talking?",
+      "helper": "Units, square feet, parcel size. Whatever you know, however you know it.",
+      "railLabel": "Scale", "next": "b3_site"
+    },
+    {
+      "id": "b3_site", "key": "b3_site", "section": "Real estate development", "look": "collage", "pattern": "cards", "cols": 3, "fig": "36", "required": true,
+      "title": "Where do things stand with the site?",
+      "options": ["We own it", "We lease it", "Under agreement or purchase and sale", "Negotiating", "Looking at options", "No site yet"],
+      "railLabel": "Site",
+      "next": { "if": [ { "answerIn": ["Looking at options", "No site yet"], "go": "b4b_location" } ], "else": "b4_address" }
+    },
+    {
+      "id": "b4_address", "key": "b4_address", "section": "Real estate development", "look": "proposal", "pattern": "fields", "fig": "36",
+      "title": "Project address",
+      "helper": "Whatever you have. A street or a parcel number both work.",
+      "fields": [
+        { "key": "street", "label": "Street", "wide": true, "autocomplete": "address-line1" },
+        { "key": "line2", "label": "Line 2", "wide": true, "autocomplete": "address-line2" },
+        { "key": "city", "label": "City", "autocomplete": "address-level2" },
+        { "key": "state", "label": "State", "autocomplete": "address-level1" },
+        { "key": "zip", "label": "Zip", "autocomplete": "postal-code" }
+      ],
+      "joinFields": true, "railLabel": "Address", "next": "b5_support"
+    },
+    {
+      "id": "b4b_location", "key": "b4b_location", "section": "Real estate development", "look": "proposal", "pattern": "write", "fig": "36",
+      "title": "Where are you looking?",
+      "helper": "Neighborhoods, a corridor, a specific lot you keep driving past. As specific as you can.",
+      "railLabel": "Looking in", "next": "b5_support"
+    },
+    {
+      "id": "b5_support", "key": "b5_support", "section": "Real estate development", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "53", "multi": true,
+      "title": "Where do you want us in this?",
+      "options": ["Predevelopment planning", "Financial feasibility and modeling", "Ownership structure and governance", "Zoning analysis", "Community engagement", "Conceptual design as part of a development scope", "Not sure yet"],
+      "exclusive": ["Not sure yet"], "railLabel": "Our part",
+      "next": { "if": [ { "answered": "a7_develop", "go": "b7_cost" } ], "else": "b6_have" }
+    },
+    {
+      "id": "b6_have", "key": "b6_have", "section": "Real estate development", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "46", "multi": true,
+      "title": "What do you already have in hand?",
+      "options": ["Architectural plans or drawings", "Site survey", "Geotech report", "Environmental report", "Market study", "Zoning or permit review", "Photos or site documentation", "None yet"],
+      "exclusive": ["None yet"], "railLabel": "In hand", "next": "b7_cost"
+    },
+    {
+      "id": "b7_cost", "key": "b7_cost", "section": "Real estate development", "look": "deck", "pattern": "scrub", "fig": "53",
+      "title": "Whole-project cost, best guess?",
+      "helper": "Everything, not just our part. Napkin math is fine.",
+      "options": ["Under $1M", "$1M to $4M", "$5M to $14M", "$15M to $29M", "$30M or more", "Not sure yet"],
+      "railLabel": "Total cost", "next": "T0"
+    },
+
+    {
+      "id": "C0", "section": "Financing strategy", "look": "deck", "pattern": "statement", "fig": "53", "kicker": "Financing strategy",
+      "title": "Money questions next.",
+      "helper": "We'll keep them short, and none of your answers commit you to anything.",
+      "button": "Continue", "next": "c1_purpose"
+    },
+    {
+      "id": "c1_purpose", "key": "c1_purpose", "section": "Financing strategy", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "53", "multi": true,
+      "title": "What's the money for?",
+      "options": ["Acquiring a property", "Developing or renovating a building", "Leasing a space", "A cooperative or community organization", "A city or publicly funded project"],
+      "other": true, "railLabel": "Money for", "next": "c2_support"
+    },
+    {
+      "id": "c2_support", "key": "c2_support", "section": "Financing strategy", "look": "proposal", "pattern": "pick", "cols": 1, "fig": "53", "multi": true,
+      "title": "What would help most?",
+      "options": ["Capital stack strategy (loans, investment, grants, and how they fit together)", "Financial feasibility analysis", "Real estate crowdfunding", "Community investment or fundraising", "Not sure yet"],
+      "exclusive": ["Not sure yet"], "railLabel": "Help with", "next": "c3_raise"
+    },
+    {
+      "id": "c3_raise", "key": "c3_raise", "section": "Financing strategy", "look": "deck", "pattern": "scrub", "fig": "53",
+      "title": "Roughly how much are you trying to raise?",
+      "options": ["Under $250k", "$250k to $1M", "$1M to $5M", "$5M or more", "Not sure yet"],
+      "railLabel": "Raise", "next": "c4_in_place"
+    },
+    {
+      "id": "c4_in_place", "key": "c4_in_place", "section": "Financing strategy", "look": "collage", "pattern": "cards", "cols": 3, "fig": "53", "multi": true,
+      "title": "What's already lined up?",
+      "helper": "\"Nothing yet\" is a normal place to start.",
+      "options": ["Grants applied for", "Grants awarded", "Conversations with a lender", "Community investors lined up", "Nothing yet"],
+      "exclusive": ["Nothing yet"], "railLabel": "Lined up", "next": "T0"
+    },
+
+    {
+      "id": "D0", "section": "Workshops and popular education", "look": "deck", "pattern": "statement", "fig": "21", "kicker": "Workshops and popular education",
+      "title": "A workshop, to us, is getting people into a room (or a Zoom) and having them leave with something they didn't walk in with.",
+      "helper": "Tell us about the room.",
+      "button": "Continue", "next": "d1_goal"
+    },
+    {
+      "id": "d1_goal", "key": "d1_goal", "section": "Workshops and popular education", "look": "proposal", "pattern": "pick", "cols": 1, "fig": "21", "multi": true,
+      "title": "What should people walk out able to do?",
+      "options": ["Understand community-owned real estate and alternative ownership models", "Work through a visioning or planning process together", "Learn about cooperative structure and governance", "Run better meetings and make decisions together", "Engage neighbors and community members well"],
+      "other": true, "railLabel": "Walk out able to", "next": "d2_audience"
+    },
+    {
+      "id": "d2_audience", "key": "d2_audience", "section": "Workshops and popular education", "look": "collage", "pattern": "cards", "cols": 2, "fig": "21",
+      "title": "Who's in the room?",
+      "options": ["Members or participants of a community organization", "Staff or an internal team", "A neighborhood or public group", "Mixed audiences"],
+      "railLabel": "In the room", "next": "d3_size"
+    },
+    {
+      "id": "d3_size", "key": "d3_size", "section": "Workshops and popular education", "look": "proposal", "pattern": "short", "fig": "21",
+      "title": "How many people, and how many sessions?",
+      "helper": "\"About 25 people, one evening\" is plenty of detail.",
+      "railLabel": "People, sessions", "next": "d4_format"
+    },
+    {
+      "id": "d4_format", "key": "d4_format", "section": "Workshops and popular education", "look": "proposal", "pattern": "short", "fig": "46",
+      "title": "In person, online or both, and when?",
+      "helper": "Dates or a window. If you have a venue, name it. If you need one, say so.",
+      "railLabel": "Format, when", "next": "d5_access"
+    },
+    {
+      "id": "d5_access", "key": "d5_access", "section": "Workshops and popular education", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "21", "multi": true,
+      "title": "What would make it easy for everyone to show up?",
+      "helper": "We budget for these from the start, so it helps to know early.",
+      "options": ["Languages or interpretation", "Physical accessibility", "Childcare", "Stipends for participants", "None that I know of", "Not sure yet"],
+      "exclusive": ["None that I know of", "Not sure yet"], "railLabel": "Access", "next": "T0"
+    },
+
+    {
+      "id": "E0", "section": "Organizational and community consulting", "look": "deck", "pattern": "statement", "fig": "17", "kicker": "Organizational and community consulting",
+      "title": "This is the people part.",
+      "helper": "In our experience it's usually the real project, whatever the building turns out to be.",
+      "button": "Continue", "next": "e1_looking"
+    },
+    {
+      "id": "e1_looking", "key": "e1_looking", "section": "Organizational and community consulting", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "09", "multi": true,
+      "title": "What's on the table?",
+      "options": ["Cooperative or collective formation", "Governance (setting up or updating ownership and decision-making)", "Organizational development (internal processes, team agreements)", "Strategic planning", "Conflict or decision-making process design", "Stakeholder facilitation", "Community engagement and advocacy campaigns", "Communications strategy", "Not sure yet"],
+      "exclusive": ["Not sure yet"], "railLabel": "On the table", "next": "e2_group"
+    },
+    {
+      "id": "e2_group", "key": "e2_group", "section": "Organizational and community consulting", "look": "proposal", "pattern": "write", "fig": "17",
+      "title": "Tell us about your group.",
+      "helper": "Who's in it, how many members or staff, how long you've been at it, and how decisions get made today (officially and actually).",
+      "railLabel": "Your group", "next": "e3_prompt"
+    },
+    {
+      "id": "e3_prompt", "key": "e3_prompt", "section": "Organizational and community consulting", "look": "proposal", "pattern": "write", "fig": "37",
+      "title": "Why now?",
+      "helper": "A decision you can't put off, a disagreement, growing pains, a grant, a new building. Something usually tipped it.",
+      "railLabel": "Why now", "next": "e4_helpers"
+    },
+    {
+      "id": "e4_helpers", "key": "e4_helpers", "section": "Organizational and community consulting", "look": "proposal", "pattern": "write", "fig": "09",
+      "title": "Who else is in your corner?",
+      "helper": "A lawyer, accountant, co-op developer, funder, or technical assistance provider. \"Nobody yet\" is fine.",
+      "railLabel": "In your corner", "next": "T0"
+    },
+
+    {
+      "id": "F0", "section": "Design, web and media", "look": "deck", "pattern": "statement", "fig": "14", "kicker": "Design, web and media",
+      "title": "This is the part people will see.",
+      "helper": "Let's work out what needs making and who it's for.",
+      "button": "Continue", "next": "f1_looking"
+    },
+    {
+      "id": "f1_looking", "key": "f1_looking", "section": "Design, web and media", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "14", "multi": true,
+      "title": "What do you need made?",
+      "options": ["Brand or visual identity", "Website design and development", "Marketing and communications materials", "Video or promotional content", "Copywriting and storytelling", "Photography", "Not sure yet"],
+      "exclusive": ["Not sure yet"], "railLabel": "Need made", "next": "f2_create"
+    },
+    {
+      "id": "f2_create", "key": "f2_create", "section": "Design, web and media", "look": "proposal", "pattern": "write", "fig": "46",
+      "title": "What's it for, and who's it for?",
+      "helper": "The thing, the audience, and what you want them to do after they see it.",
+      "railLabel": "For", "next": "f3_have"
+    },
+    {
+      "id": "f3_have", "key": "f3_have", "section": "Design, web and media", "look": "collage", "pattern": "cards", "cols": 3, "fig": "14", "multi": true,
+      "title": "What do you already have?",
+      "helper": "Even a logo someone made in 2014 counts. We can work with it, or around it.",
+      "options": ["Brand or visual identity (colors, fonts, guidelines)", "Logo", "Website", "Written content or copy", "Photos", "Video", "Design system", "None yet", "Not sure what we have"],
+      "exclusive": ["None yet", "Not sure what we have"], "railLabel": "Already have", "next": "f4_refs"
+    },
+    {
+      "id": "f4_refs", "key": "f4_refs", "section": "Design, web and media", "look": "proposal", "pattern": "write", "fig": "14",
+      "title": "Anything out there you wish was yours?",
+      "helper": "Links to sites, posters, videos, a competitor's thing you grudgingly admire. Anything from anywhere.",
+      "railLabel": "Wish was yours", "next": "T0"
+    },
+
+    {
+      "id": "G0", "section": "Software and custom tools", "look": "deck", "pattern": "statement", "fig": "09", "kicker": "Software and custom tools",
+      "title": "We build tools around how your group actually works, rather than asking your group to work around a tool.",
+      "helper": "A few questions so we understand the shape of it.",
+      "button": "Continue", "next": "g1_build"
+    },
+    {
+      "id": "g1_build", "key": "g1_build", "section": "Software and custom tools", "look": "proposal", "pattern": "pick", "cols": 1, "fig": "09", "multi": true,
+      "title": "What are you trying to build or fix?",
+      "options": ["A simple tool or form (intake, survey, directory)", "A platform (member portal, booking, investment tracking, community dashboard)", "Improving or expanding something that exists", "Connecting tools you already use", "Not sure yet"],
+      "exclusive": ["Not sure yet"], "railLabel": "Build or fix",
+      "next": { "if": [ { "answered": "t1_custom_tool", "go": "g2_users" } ], "else": "g2_users" }
+    },
+    {
+      "id": "g2_users", "key": "g2_users", "section": "Software and custom tools", "look": "proposal", "pattern": "short", "fig": "17",
+      "title": "Who uses it, and roughly how many people?",
+      "helper": "\"Our 40 members and 3 staff\" is exactly the right level of detail.",
+      "railLabel": "Users",
+      "next": { "if": [ { "answered": "t1_custom_tool", "go": "t2_funding" } ], "else": "g3_connect" }
+    },
+    {
+      "id": "g3_connect", "key": "g3_connect", "section": "Software and custom tools", "look": "proposal", "pattern": "write", "fig": "09",
+      "title": "What do you run on today, and what does this need to talk to?",
+      "helper": "Spreadsheets, QuickBooks, Stripe, Notion, a membership database, a city system, a very important binder.",
+      "railLabel": "Runs on", "next": "g4_compliance"
+    },
+    {
+      "id": "g4_compliance", "key": "g4_compliance", "section": "Software and custom tools", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "37", "multi": true,
+      "title": "Compliance or security requirements?",
+      "options": ["Government or public agency requirements", "Education data (FERPA)", "Health data (HIPAA)", "Accessibility standards (ADA or WCAG)", "Data privacy requirements", "Multilingual support", "None that I know of", "Not sure yet"],
+      "exclusive": ["None that I know of", "Not sure yet"], "railLabel": "Requirements", "next": "g5_maintain"
+    },
+    {
+      "id": "g5_maintain", "key": "g5_maintain", "section": "Software and custom tools", "look": "collage", "pattern": "cards", "cols": 3, "fig": "09",
+      "title": "Who looks after it once it's live?",
+      "helper": "Either works. It changes how we build it.",
+      "options": ["CoEverything, ongoing", "Our own team", "Not sure yet"],
+      "railLabel": "Looks after it", "next": "T0b"
+    },
+
+    {
+      "id": "T0", "section": "Nearly done", "look": "deck", "pattern": "statement", "fig": "24", "kicker": "Nearly done",
+      "title": "A few practical questions, so that when we talk we can be concrete.",
+      "button": "Continue", "next": "t1_custom_tool"
+    },
+    {
+      "id": "T0b", "section": "Nearly done", "look": "deck", "pattern": "statement", "fig": "24", "kicker": "Nearly done",
+      "title": "A few practical questions, so that when we talk we can be concrete.",
+      "button": "Continue", "next": "t2_funding"
+    },
+    {
+      "id": "t1_custom_tool", "key": "t1_custom_tool", "section": "Nearly done", "look": "collage", "pattern": "cards", "cols": 3, "fig": "09",
+      "title": "One more thing we do: build small custom tools for projects like yours.",
+      "helper": "A member portal, intake and booking, decision tracking, a dashboard your board can actually read. Worth a conversation?",
+      "options": ["Yes", "Maybe, tell me more when we talk", "Not for this one"],
+      "railLabel": "Custom tools",
+      "next": { "if": [ { "answerIn": ["Yes", "Maybe, tell me more when we talk"], "go": "g1_build" } ], "else": "t2_funding" }
+    },
+    {
+      "id": "t2_funding", "key": "t2_funding", "section": "Nearly done", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "37", "required": true,
+      "title": "Where does the money stand?",
+      "helper": "No wrong answer. It tells us whether we're scoping a project or a path to one.",
+      "options": ["Secured", "Partially secured", "Applied for, waiting to hear", "Planning to fundraise", "Nothing yet", "Not sure"],
+      "railLabel": "Money", "next": "t3_budget"
+    },
+    {
+      "id": "t3_budget", "key": "t3_budget", "section": "Nearly done", "look": "deck", "pattern": "scrub", "fig": "53",
+      "title": "What do you have in mind for our part?",
+      "helper": "So we bring options that fit instead of guessing. Doesn't include engineers, other consultants, or snacks for our meetings.",
+      "options": ["$9,999 or less", "$10k to $19k", "$20k to $49k", "$50k to $99k", "$100k or more", "Not sure yet"],
+      "railLabel": "Our part", "next": "t4_team"
+    },
+    {
+      "id": "t4_team", "key": "t4_team", "section": "Nearly done", "look": "proposal", "pattern": "write", "fig": "17",
+      "title": "Who's already on the team?",
+      "helper": "A lawyer, engineers, a builder, a development partner, an owner's rep, a funder with opinions.",
+      "railLabel": "Team", "next": "t5_process"
+    },
+    {
+      "id": "t5_process", "key": "t5_process", "section": "Nearly done", "look": "proposal", "pattern": "write", "fig": "37",
+      "title": "How are you deciding who to work with?",
+      "helper": "A proposal deadline, an RFP, other firms you're talking to, a board vote. Helps us show up right.",
+      "railLabel": "Deciding how", "next": "t6_uploads"
+    },
+    {
+      "id": "t6_uploads", "key": "t6_uploads", "section": "Nearly done", "look": "proposal", "pattern": "upload", "fig": "46",
+      "title": "Got files? Drop them here.",
+      "helper": "Plans, a survey, an RFP, bylaws, a one-pager about your organization. Phone photos of a napkin are accepted.",
+      "railLabel": "Files", "next": "t7_success"
+    },
+    {
+      "id": "t7_success", "key": "t7_success", "section": "Nearly done", "look": "proposal", "pattern": "write", "fig": "37",
+      "title": "A year from now, what would make you glad you did this?",
+      "helper": "Affordability you hit, a date you made, a budget you stayed inside, neighbors who showed up. Whatever counts from your side.",
+      "railLabel": "Glad because", "next": "t8_else"
+    },
+    {
+      "id": "t8_else", "key": "t8_else", "section": "Nearly done", "look": "proposal", "pattern": "write", "fig": "46",
+      "title": "Anything else?",
+      "helper": "The thing you've been waiting to say. Or nothing. Both fine.",
+      "button": "Send it",
+      "railLabel": "Else", "next": "thanks", "submit": true
+    },
+
+    {
+      "id": "thanks", "section": "Thank you", "look": "deck", "pattern": "statement", "fig": "70",
+      "title": "Thanks, {contact_first}!",
+      "helper": "That's everything we need for now. We'll read it properly and come to our conversation with questions worth your time. We'll be in touch once we have. If something comes up before then, hello@coeverything.co reaches all of us.",
+      "button": "Back to coeverything.co", "link": "https://coeverything.co"
+    }
+  ]
+}

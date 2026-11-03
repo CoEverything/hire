@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hire CoEverything</title>
+  <meta name="description" content="Tell CoEverything about your project. About ten minutes, nothing binding.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#333a83">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Roboto:wght@400;500&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-look="deck">
+  <div class="app">
+    <div class="shapes" aria-hidden="true">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+
+    <header class="top">
+      <div class="crumb" id="crumb">CoEverything</div>
+      <div class="step" id="step" aria-live="polite"></div>
+    </header>
+    <div class="progress" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="100"><i id="bar"></i></div>
+
+    <main class="stage">
+      <aside class="rail" id="rail" hidden aria-label="Your answers so far">
+        <h2>Your answers so far</h2>
+        <div class="rail-list" id="rail-list"></div>
+        <div class="rail-fig" aria-hidden="true"><img id="rail-img" alt="" src=""></div>
+      </aside>
+
+      <div class="screens" id="screens"></div>
+
+      <div class="side" id="side" aria-hidden="true">
+        <div class="blob"></div>
+        <img id="side-img" alt="" src="">
+      </div>
+    </main>
+
+    <footer class="credit">
+      <a id="credit-link" href="https://www.cutoutmix.com/archifunky.html" target="_blank" rel="noopener">People illustrations: cutoutmix (francescaperani), CC BY 4.0</a>
+      <a href="https://coeverything.co" target="_blank" rel="noopener">coeverything.co</a>
+    </footer>
+
+    <!-- honeypot: humans never see this -->
+    <input id="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;height:0;width:0">
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
