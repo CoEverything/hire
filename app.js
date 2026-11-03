@@ -390,13 +390,12 @@
     if (s.pattern === 'upload') {
       const input = el('input', { type: 'file', multiple: true, accept: '.pdf,.png,.jpg,.jpeg,.gif,.webp,.heic,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt,.md,.zip', onchange: e => addFiles(e.target.files) });
       const drop = el('div', { class: 'drop', role: 'button', tabindex: 0, onclick: () => input.click(), onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } } },
-        el('svg', { html: '<path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>', width: 36, height: 36, viewBox: '0 0 24 24', fill: 'none', stroke: '#2e7268', 'stroke-width': 1.8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' }),
         el('strong', { html: 'Drag files here, or <u>browse</u>' }),
         el('small', {}, `Up to ${form.meta.maxUploads} files, ${Math.round(form.meta.maxUploadBytes / 1048576)} MB each. PDF, images, docs, spreadsheets.`),
         input);
-      // svg via createElement is not namespaced; replace with real svg
-      const svgHolder = drop.querySelector('svg'); const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      for (const a of svgHolder.attributes) svg.setAttribute(a.name, a.value); svg.innerHTML = svgHolder.innerHTML; svgHolder.replaceWith(svg);
+      const icon = document.createElement('div');
+      icon.innerHTML = '<svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2e7268" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>';
+      drop.prepend(icon.firstChild);
       ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
       ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
       drop.addEventListener('drop', e => addFiles(e.dataTransfer.files));
