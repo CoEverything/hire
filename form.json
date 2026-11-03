@@ -1260,7 +1260,19 @@
         "Not sure yet"
       ],
       "railLabel": "Our part",
-      "next": "t4_team"
+      "next": "t4_team",
+      "variants": [
+        {
+          "when": {
+            "key": "project_cost",
+            "answerIn": [
+              "Doesn't apply: there's nothing beyond the work we need from you"
+            ]
+          },
+          "title": "What's your budget for this work?",
+          "helper": "Since our work is the whole project, this is your whole budget. Doesn't include engineers, other consultants, or snacks for our meetings."
+        }
+      ]
     },
     {
       "id": "t4_team",

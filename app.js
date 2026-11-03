@@ -239,7 +239,23 @@
     img.onload = () => { img.style.setProperty('--fig-scale', Math.min(1, img.naturalHeight / 1100).toFixed(3)); };
   }
 
+  // Some screens change wording based on an earlier answer (form.json "variants").
+  function wording(s) {
+    for (const v of s.variants || []) {
+      const ans = answers[v.when.key];
+      if (v.when.answerIn && v.when.answerIn.includes(ans)) return { title: v.title || s.title, helper: v.helper ?? s.helper, variant: true };
+    }
+    return { title: s.title, helper: s.helper, variant: false };
+  }
+  // Question wording the visitor actually saw, for screens that have variants (sent with the answers).
+  function shownLabels() {
+    const out = {};
+    for (const id of history) { const s = byId[id]; if (s && s.key && s.variants) { const w = wording(s); if (w.variant) out[s.key] = w.title; } }
+    return out;
+  }
+
   function renderScreen(s) {
+    const W = wording(s);
     const node = el('section', { class: 'screen', 'data-pattern': s.pattern, 'aria-labelledby': 'q-title' });
     const body = el('div', { class: 'screen-body' });
     node.append(body);
@@ -248,12 +264,12 @@
 
     if (s.pattern === 'statement') {
       if (s.kicker) body.append(el('div', { class: 'kicker' }, s.kicker));
-      body.append(el('h1', { id: 'q-title' }, fill(s.title)));
-      if (s.helper) body.append(el('p', { class: 'helper' }, fill(s.helper)));
+      body.append(el('h1', { id: 'q-title' }, fill(W.title)));
+      if (W.helper) body.append(el('p', { class: 'helper' }, fill(W.helper)));
     } else {
       if (['write', 'short', 'fields', 'upload'].includes(s.pattern)) body.append(el('div', { class: 'bar' }));
-      body.append(el('h1', { id: 'q-title' }, fill(s.title)));
-      if (s.helper) body.append(el('p', { class: 'helper' }, fill(s.helper)));
+      body.append(el('h1', { id: 'q-title' }, fill(W.title)));
+      if (W.helper) body.append(el('p', { class: 'helper' }, fill(W.helper)));
       body.append(renderInput(s));
     }
     body.append(el('div', { class: 'field-error', id: 'err', role: 'alert' }));
@@ -620,7 +636,7 @@
     try { for (const f of files) uploads.push({ name: f.name, type: f.type, data: await toBase64(f) }); }
     catch (_) { toast('One of the files would not read. Send it by email after and we will attach it.'); }
 
-    const payload = { secret: config.secret || '', status: 'complete', session, last_step: current.id, answers: clean, uploads, source_url: location.href.split('?')[0], user_agent: navigator.userAgent, hp: $('#hp')?.value || '' };
+    const payload = { secret: config.secret || '', status: 'complete', session, last_step: current.id, answers: clean, shown: shownLabels(), uploads, source_url: location.href.split('?')[0], user_agent: navigator.userAgent, hp: $('#hp')?.value || '' };
     if (payload.hp) { finish(); return; } // bot filled the honeypot: pretend
 
     try {

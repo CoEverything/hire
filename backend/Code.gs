@@ -66,7 +66,7 @@ function doPost(e) {
     const lock = LockService.getScriptLock();
     lock.waitLock(20000);
     try { appendRow(answers); } finally { lock.releaseLock(); }
-    if (!partial) notify(answers);
+    if (!partial) notify(answers, body.shown || {});
     return respond({ ok: true });
   } catch (err) {
     return respond({ ok: false, error: String(err) });
@@ -118,6 +118,9 @@ function appendRow(answers) {
     if (hit) {
       const r = hit.getRow();
       const old = sheet.getRange(r, 1, 1, headers.length).getValues()[0];
+      // A late in-progress save must never overwrite a finished response.
+      const st = headers.indexOf('status');
+      if (st > -1 && old[st] === 'complete' && answers.status !== 'complete') return;
       // keep earlier answers the visitor did not resend (for example upload links)
       const merged = row.map((v, i) => (v === '' && old[i] !== '' && !(headers[i] in answers)) ? old[i] : v);
       sheet.getRange(r, 1, 1, merged.length).setValues([merged]);
@@ -129,7 +132,8 @@ function appendRow(answers) {
 
 // Emails a readable summary: each answer under the question the person saw
 // (taken from row 1 of the Responses tab), grouped by section, empty answers left out.
-function notify(a) {
+function notify(a, shown) {
+  shown = shown || {};
   if (!CONFIG.NOTIFY_TO) return;
   const ss = SpreadsheetApp.openById(CONFIG.SHEET_ID);
   const sheet = ss.getSheetByName(CONFIG.SHEET_NAME);
@@ -163,6 +167,7 @@ function notify(a) {
     let label = labels[k], group = 'About the project';
     const m = label.match(/^([A-Za-z -]+): ([\s\S]*)$/);
     if (m) { group = m[1]; label = m[2]; }
+    if (shown[k]) label = String(shown[k]);   // the wording this person saw, when a question has variants
     if (!byGroup[group]) { byGroup[group] = []; groups.push(group); }
     byGroup[group].push([label, val(v)]);
   });
