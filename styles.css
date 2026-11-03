@@ -226,6 +226,7 @@ textarea:focus, input:focus { border-color: var(--prop-teal); outline: none; box
   font-family: var(--head); font-size: 14px; font-weight: 700; cursor: pointer;
   transition: transform 160ms var(--ease), background 160ms, border-color 160ms, color 160ms;
 }
+.chip .key { display: inline-flex; width: 20px; height: 20px; margin: 0 8px 0 -6px; align-items: center; justify-content: center; border-radius: 10px; border: 1.5px solid currentColor; font-size: 10px; font-weight: 900; vertical-align: middle; }
 .chip:hover { transform: translateY(-1px); border-color: var(--amber); }
 .chip[aria-checked="true"] { background: var(--amber); border-color: var(--amber); color: var(--ink); }
 
@@ -270,6 +271,8 @@ textarea:focus, input:focus { border-color: var(--prop-teal); outline: none; box
 .enter-hint kbd { display: inline-block; padding: 2px 7px; border: 1px solid var(--muted); border-radius: 4px; font-family: var(--text); font-weight: 500; }
 .skip { margin-left: auto; background: none; border: 0; padding: 6px 0; font-family: var(--head); font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; text-decoration: none; }
 .skip:hover { text-decoration: underline; }
+.skip.ahead { margin-left: 0; color: var(--label); }
+.skip + .skip.ahead { margin-left: 12px; }
 .back { background: none; border: 0; padding: 0 0 10px; align-self: flex-start; font-family: var(--head); font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; }
 .back:hover { color: var(--fg); }
 .back[hidden] { display: none; }

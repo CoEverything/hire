@@ -468,7 +468,7 @@
     {
       "id": "thanks", "section": "Thank you", "look": "deck", "pattern": "statement", "fig": "70",
       "title": "Thanks, {contact_first}!",
-      "helper": "That's everything we need for now. We'll read it properly and come to our conversation with questions worth your time. We'll be in touch once we have. If something comes up before then, hello@coeverything.co reaches all of us.",
+      "helper": "That's everything we need for now. We'll read it properly, then get in touch to set up a time to talk. If something comes up before then, hello@coeverything.co reaches all of us.",
       "button": "Back to coeverything.co", "link": "https://coeverything.co"
     }
   ]

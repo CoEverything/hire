@@ -29,6 +29,8 @@
   let answers = {};
   let files = [];           // File objects for the upload screen
   let history = [];         // screen ids visited, in order
+  let future = [];          // screens ahead when the visitor went back to edit; kept so later answers survive
+  let silentPop = false;    // true while we move browser history ourselves
   let current = null;
   let busy = false;
   let submitted = false;
@@ -60,9 +62,11 @@
 
     document.addEventListener('keydown', onKey);
     window.addEventListener('beforeunload', persist);
+    window.addEventListener('popstate', onPop);
 
     const start = history.length ? history[history.length - 1] : 'welcome';
     history = history.length ? history : ['welcome'];
+    window.history.replaceState({ n: history.length }, '');
     show(start, 'none');
   }
 
@@ -252,6 +256,11 @@
     if (!s.required && s.pattern !== 'statement' && s.id !== 'thanks' && !s.submit) {
       actions.append(el('button', { type: 'button', class: 'skip', onclick: () => skip() }, 'Skip for now'));
     }
+    const ahead = (future.length && s.id !== 'thanks') ? validFuture() : [];
+    if (ahead.length) {
+      const dest = byId[ahead[ahead.length - 1]];
+      actions.append(el('button', { type: 'button', class: 'skip ahead', onclick: () => returnAhead() }, `Return to "${(dest.title || '').replace(/[.?]$/, '')}" →`));
+    }
     body.append(actions);
     return node;
   }
@@ -336,7 +345,7 @@
           b = el('button', { type: 'button', class: 'card', role, 'aria-checked': String(checked), style: { '--rot': `${ROTS[i % ROTS.length]}deg`, '--i': i } },
             el('span', { class: 'key' }, KEYS[i]), el('span', {}, o.v));
         } else if (s.pattern === 'scrub') {
-          b = el('button', { type: 'button', class: 'chip', role, 'aria-checked': String(checked), style: { '--i': i } }, o.v);
+          b = el('button', { type: 'button', class: 'chip', role, 'aria-checked': String(checked), style: { '--i': i } }, el('span', { class: 'key' }, KEYS[i]), o.v);
         } else {
           b = el('button', { type: 'button', class: 'opt' + (multi ? ' multi' : ''), role, 'aria-checked': String(checked), style: { '--i': i } },
             el('span', { class: 'key' }, KEYS[i]),
@@ -462,8 +471,7 @@
     let nid = nextOf(current);
     if (!nid) return;
     if (nid === 'service' && preService && answers.service) nid = 'also_interested';
-    history.push(nid);
-    show(nid, 'forward');
+    goForward(nid);
   }
   function skip() {
     if (busy || !current) return;
@@ -471,19 +479,65 @@
     if (current.pattern === 'upload') { files = []; }
     const nid = nextOf(current);
     if (!nid) return;
+    goForward(nid);
+  }
+  function goForward(nid) {
+    // If the visitor came back to edit and the route from here is unchanged, keep the trail ahead.
+    if (future.length && future[0] === nid) future.shift(); else future = [];
     history.push(nid);
+    window.history.pushState({ n: history.length }, '');
     show(nid, 'forward');
   }
   function back() {
     if (busy || history.length < 2) return;
-    history.pop();
-    show(history[history.length - 1], 'back');
+    stepBack(history.length - 2);
+    window.history.pushState({ n: history.length }, '');
   }
   function jumpBack(id) {
     const i = history.indexOf(id);
     if (i < 0) return;
+    stepBack(i);
+    window.history.pushState({ n: history.length }, '');
+  }
+  function stepBack(i) {
+    future = history.slice(i + 1).concat(future);
     history = history.slice(0, i + 1);
-    show(id, 'back');
+    show(history[i], 'back');
+  }
+  // How far the saved trail is still valid given the current answers.
+  function validFuture() {
+    const out = [];
+    let from = current;
+    for (const id of future) {
+      let nid = nextOf(from);
+      if (nid === 'service' && preService && answers.service) nid = 'also_interested';
+      if (nid !== id) break;
+      out.push(id); from = byId[id];
+    }
+    return out;
+  }
+  function returnAhead() {
+    if (busy || !current) return;
+    if (current.pattern !== 'statement' && !validate(current)) return;
+    const trail = validFuture();
+    if (!trail.length) return;
+    future = [];
+    history = history.concat(trail);
+    window.history.pushState({ n: history.length }, '');
+    show(history[history.length - 1], 'forward');
+  }
+  function onPop(e) {
+    if (busy || submitted) return;
+    const n = e.state && e.state.n;
+    if (!n) return;
+    if (n < history.length) { stepBack(n - 1); }
+    else if (n > history.length) {
+      const trail = validFuture().slice(0, n - history.length);
+      if (!trail.length) { window.history.replaceState({ n: history.length }, ''); return; }
+      future = future.slice(trail.length);
+      history = history.concat(trail);
+      show(history[history.length - 1], 'forward');
+    }
   }
 
   function onKey(e) {
