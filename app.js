@@ -107,7 +107,7 @@
     }
     if (n.if) {
       for (const rule of n.if) {
-        if (rule.answerIn && rule.answerIn.includes(answers[screen.key])) return rule.go;
+        if (rule.answerIn && rule.answerIn.includes(answers[rule.key || screen.key])) return rule.go;
         if (rule.answered && answers[rule.answered] !== undefined && answers[rule.answered] !== '') return rule.go;
       }
       return n.else;
@@ -130,7 +130,7 @@
       else if (n.if) {
         let go = null;
         for (const rule of n.if) {
-          if (rule.answerIn && rule.answerIn.includes(answers[s.key])) go = rule.go;
+          if (rule.answerIn && rule.answerIn.includes(answers[rule.key || s.key])) go = rule.go;
           else if (rule.answered && answers[rule.answered]) go = rule.go;
           if (go) break;
         }

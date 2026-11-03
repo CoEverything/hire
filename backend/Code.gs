@@ -28,7 +28,7 @@ const CONFIG = {
     'e1_looking','e2_group','e3_prompt','e4_helpers',
     'f1_looking','f2_create','f3_have','f4_refs',
     'g1_build','g2_users','g3_connect','g4_compliance','g5_maintain',
-    't1_custom_tool','t2_funding','t3_budget','t4_team','t5_process','t6_uploads','t7_success','t8_else',
+    't1_custom_tool','t2_funding','t2b_sources','t3_budget','t4_team','t5_process','t6_uploads','t7_success','t8_else',
     'source_url','user_agent','status','last_step','session_id'
   ]
 };
@@ -131,8 +131,9 @@ function notify(a) {
   if (!CONFIG.NOTIFY_TO) return;
   const name = [a.contact_first, a.contact_last].filter(Boolean).join(' ');
   const subject = 'Intake: ' + (a.contact_org || name || 'new response') + ' (' + (a.service || 'no service') + ')';
-  const lines = CONFIG.FIELD_ORDER
-    .filter(k => a[k] !== undefined && a[k] !== '' && k !== 'user_agent')
+  const keys = CONFIG.FIELD_ORDER.concat(Object.keys(a).filter(k => CONFIG.FIELD_ORDER.indexOf(k) === -1));
+  const lines = keys
+    .filter(k => a[k] !== undefined && a[k] !== '' && ['user_agent', 'session_id', 'status', 'last_step'].indexOf(k) === -1)
     .map(k => k + ': ' + (Array.isArray(a[k]) ? a[k].join('; ') : a[k]));
   MailApp.sendEmail({
     to: CONFIG.NOTIFY_TO,

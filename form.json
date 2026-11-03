@@ -421,14 +421,21 @@
     },
     {
       "id": "t2_funding", "key": "t2_funding", "section": "Nearly done", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "37", "required": true,
-      "title": "Where does the money stand?",
+      "title": "Where does funding for your project stand?",
       "helper": "No wrong answer. It tells us whether we're scoping a project or a path to one.",
       "options": ["Secured", "Partially secured", "Applied for, waiting to hear", "Planning to fundraise", "Nothing yet", "Not sure"],
-      "railLabel": "Money", "next": "t3_budget"
+      "railLabel": "Funding",
+      "next": { "if": [ { "key": "service", "answerIn": ["Financing strategy"], "go": "t3_budget" } ], "else": "t2b_sources" }
+    },
+    {
+      "id": "t2b_sources", "key": "t2b_sources", "section": "Nearly done", "look": "proposal", "pattern": "pick", "cols": 2, "fig": "53", "multi": true,
+      "title": "Where is it coming from, or where do you expect it to come from?",
+      "options": ["Our own funds or equity", "Grants", "Loans or debt", "Investors or community capital", "Public or city funding", "Fundraising or donations", "Not sure yet"],
+      "exclusive": ["Not sure yet"], "railLabel": "Funding from", "next": "t3_budget"
     },
     {
       "id": "t3_budget", "key": "t3_budget", "section": "Nearly done", "look": "deck", "pattern": "scrub", "fig": "53",
-      "title": "What do you have in mind for our part?",
+      "title": "What budget do you have in mind for our services?",
       "helper": "So we bring options that fit instead of guessing. Doesn't include engineers, other consultants, or snacks for our meetings.",
       "options": ["$9,999 or less", "$10k to $19k", "$20k to $49k", "$50k to $99k", "$100k or more", "Not sure yet"],
       "railLabel": "Our part", "next": "t4_team"
@@ -453,9 +460,9 @@
     },
     {
       "id": "t7_success", "key": "t7_success", "section": "Nearly done", "look": "proposal", "pattern": "write", "fig": "37",
-      "title": "A year from now, what would make you glad you did this?",
-      "helper": "Affordability you hit, a date you made, a budget you stayed inside, neighbors who showed up. Whatever counts from your side.",
-      "railLabel": "Glad because", "next": "t8_else"
+      "title": "What's the next big milestone you're working toward?",
+      "helper": "Most projects take longer than anyone hopes, and that's normal. Design runs months, and site searches and financing can run years. Tell us the next step you'd like to get to, and we'll talk about what it takes.",
+      "railLabel": "Next milestone", "next": "t8_else"
     },
     {
       "id": "t8_else", "key": "t8_else", "section": "Nearly done", "look": "proposal", "pattern": "write", "fig": "46",
