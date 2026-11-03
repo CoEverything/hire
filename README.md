@@ -4,7 +4,8 @@ The intake form at hire.coeverything.co. A static site on GitHub Pages; submissi
 
 ## Files
 
-- `index.html`, `styles.css`, `app.js`: the form engine. One screen at a time, keyboard shortcuts (A to J pick an option, Enter continues, Shift+Enter is a newline, Backspace goes back), a summary rail of answers so far, drafts saved in the browser for a week.
+- `index.html`, `styles.css`, `app.js`: the form engine. One screen at a time, keyboard shortcuts (A to J pick an option, Enter or → continues, ← or Backspace goes back, Shift+Enter is a newline), browser back/forward buttons work, editing an earlier answer keeps the later ones, a summary rail of answers so far.
+- Saving: answers are kept in the visitor's browser for a week so they can come back and finish. Once they've given an email, each step is also saved to the Sheet as an "in progress" row; the final send turns that same row "complete" and emails hello@.
 - `form.json`: every screen, in order, with its copy, options, routing and which figure appears. **Edit this to change wording or questions.** No code changes needed.
 - `config.json`: the endpoint URL and the shared secret the endpoint expects. The secret is visible to anyone who reads the source; it filters casual spam, nothing more.
 - `assets/figures/`: cutoutmix Archifunky figures (CC BY 4.0). Credit line is on every screen. `assets/figures/LICENSE.txt` has the details.
@@ -34,4 +35,4 @@ Commit to `main` and GitHub Pages redeploys in about a minute.
 
 Responses Sheet (hello@ account): https://docs.google.com/spreadsheets/d/1GRjooHAHI2_r13gtow_XPGAPzmuT_CsnEi_hWdi7IB8/edit
 
-Each submission appends a row, emails hello@coeverything.co, and puts any uploads in the Drive folder "Hire CoEverything uploads" with a link in the `t6_uploads` column. To change the endpoint code, edit it in the Apps Script editor and publish a new version of the existing deployment so the URL stays the same.
+The Responses tab has the question text in row 1 and the column key and answer type in row 2. Each finished submission completes its row, emails hello@coeverything.co, and puts any uploads in the Drive folder "Hire CoEverything uploads" with a link in the `t6_uploads` column. To change the endpoint code, edit it in the Apps Script editor and publish a new version of the existing deployment so the URL stays the same.

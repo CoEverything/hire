@@ -34,6 +34,8 @@
   let current = null;
   let busy = false;
   let submitted = false;
+  let session = '';         // one id per visitor, so in-progress saves update one row in the Sheet
+  let lastSaved = '';
   let preService = false;   // service came from the link, so its screen is skipped
 
   // ---------- boot ----------
@@ -63,17 +65,22 @@
     document.addEventListener('keydown', onKey);
     window.addEventListener('beforeunload', persist);
     window.addEventListener('popstate', onPop);
+    window.addEventListener('pagehide', savePartial);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') savePartial(); });
+    if (!session) session = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+    const resumed = history.length > 1;
 
     const start = history.length ? history[history.length - 1] : 'welcome';
     history = history.length ? history : ['welcome'];
     window.history.replaceState({ n: history.length }, '');
     show(start, 'none');
+    if (resumed) toast(`Welcome back. We kept your answers. <a href="?fresh">Start over</a>`);
   }
 
   // ---------- persistence ----------
   function persist() {
     if (submitted) { try { localStorage.removeItem(STORE); } catch (_) {} return; }
-    try { localStorage.setItem(STORE, JSON.stringify({ answers, history, t: Date.now() })); } catch (_) {}
+    try { localStorage.setItem(STORE, JSON.stringify({ answers, history, future, session, t: Date.now() })); } catch (_) {}
   }
   function restore() {
     try {
@@ -81,7 +88,11 @@
       if (!raw) return;
       const d = JSON.parse(raw);
       if (!d || Date.now() - d.t > 7 * 864e5) return;
-      if (Array.isArray(d.history) && d.history.every(id => byId[id])) { answers = { ...d.answers, ...answers }; history = d.history; }
+      if (Array.isArray(d.history) && d.history.every(id => byId[id])) {
+        answers = { ...d.answers, ...answers }; history = d.history;
+        future = Array.isArray(d.future) ? d.future.filter(id => byId[id]) : [];
+        session = d.session || '';
+      }
     } catch (_) {}
   }
 
@@ -487,6 +498,7 @@
     history.push(nid);
     window.history.pushState({ n: history.length }, '');
     show(nid, 'forward');
+    savePartial();
   }
   function back() {
     if (busy || history.length < 2) return;
@@ -558,7 +570,29 @@
       const btns = document.querySelectorAll('#screens .screen:not(.leave) [role="radio"], #screens .screen:not(.leave) [role="checkbox"]');
       if (btns[i]) { e.preventDefault(); btns[i].click(); }
     }
-    if (e.key === 'Backspace' && !typing) { e.preventDefault(); back(); }
+    if ((e.key === 'Backspace' || e.key === 'ArrowLeft') && !e.metaKey && !e.altKey) { e.preventDefault(); back(); }
+    if (e.key === 'ArrowRight' && !e.metaKey && !e.altKey) { e.preventDefault(); advance(); }
+  }
+
+  // ---------- saving ----------
+  function cleanAnswers() {
+    const clean = {};
+    for (const [k, v] of Object.entries(answers)) { if (k.startsWith('_')) continue; clean[k] = Array.isArray(v) ? v : (typeof v === 'string' ? v.trim() : v); }
+    clean.also_interested = Array.isArray(clean.also_interested) ? clean.also_interested : (clean.also_interested ? [clean.also_interested] : []);
+    delete clean.t6_uploads;   // files only go with the final send
+    return clean;
+  }
+  // Saves what someone has entered so far as an "in progress" row, once we have an email to tie it to.
+  function savePartial() {
+    if (!config.endpoint || submitted || busy || !answers.contact_email || ($('#hp')?.value)) return;
+    const body = JSON.stringify({ secret: config.secret || '', status: 'partial', session, last_step: current ? current.id : '', answers: cleanAnswers(), source_url: location.href.split('?')[0], user_agent: navigator.userAgent });
+    const sig = body.replace(/"last_step":"[^"]*",/, '');
+    if (sig === lastSaved) return;
+    lastSaved = sig;
+    try {
+      const sent = navigator.sendBeacon && navigator.sendBeacon(config.endpoint, new Blob([body], { type: 'text/plain;charset=utf-8' }));
+      if (!sent) fetch(config.endpoint, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body });
+    } catch (_) {}
   }
 
   // ---------- submit ----------
@@ -568,15 +602,13 @@
     if (!config.endpoint) { toast(`This form isn't wired up yet. Email us at <a href="mailto:${form.meta.contactEmail}">${form.meta.contactEmail}</a>.`); return; }
     busy = true; btn.disabled = true; btn.textContent = 'Sending…';
 
-    const clean = {};
-    for (const [k, v] of Object.entries(answers)) { if (k.startsWith('_')) continue; clean[k] = Array.isArray(v) ? v : (typeof v === 'string' ? v.trim() : v); }
-    clean.also_interested = Array.isArray(clean.also_interested) ? clean.also_interested : (clean.also_interested ? [clean.also_interested] : []);
+    const clean = cleanAnswers();
 
     const uploads = [];
     try { for (const f of files) uploads.push({ name: f.name, type: f.type, data: await toBase64(f) }); }
     catch (_) { toast('One of the files would not read. Send it by email after and we will attach it.'); }
 
-    const payload = { secret: config.secret || '', answers: clean, uploads, source_url: location.href.split('?')[0], user_agent: navigator.userAgent, hp: $('#hp')?.value || '' };
+    const payload = { secret: config.secret || '', status: 'complete', session, last_step: current.id, answers: clean, uploads, source_url: location.href.split('?')[0], user_agent: navigator.userAgent, hp: $('#hp')?.value || '' };
     if (payload.hp) { finish(); return; } // bot filled the honeypot: pretend
 
     try {
@@ -597,6 +629,7 @@
   function finish(uncertain) {
     submitted = true; busy = false;
     try { localStorage.removeItem(STORE); } catch (_) {}
+    session = '';
     history.push('thanks');
     show('thanks', 'forward');
     if (uncertain) toast(`Sent. If you don't hear from us in a few days, nudge <a href="mailto:${form.meta.contactEmail}">${form.meta.contactEmail}</a>.`);
